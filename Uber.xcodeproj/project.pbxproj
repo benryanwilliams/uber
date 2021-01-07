@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5525A58E0000463B21 /* Extensions.swift */; };
+		63CF3C5D25A72C5800463B21 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */; };
+		63CF3C6125A7571B00463B21 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C6025A7571B00463B21 /* AuthButton.swift */; };
 		63DD8CA325A4CF9A00A75B29 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD8CA225A4CF9A00A75B29 /* AppDelegate.swift */; };
 		63DD8CA525A4CF9A00A75B29 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DD8CA425A4CF9A00A75B29 /* SceneDelegate.swift */; };
 		63DD8CAA25A4CF9A00A75B29 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63DD8CA825A4CF9A00A75B29 /* Main.storyboard */; };
@@ -16,6 +19,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		63CF3C5525A58E0000463B21 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		63CF3C6025A7571B00463B21 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
 		63DD8C9F25A4CF9A00A75B29 /* Uber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Uber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63DD8CA225A4CF9A00A75B29 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63DD8CA425A4CF9A00A75B29 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -37,6 +43,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63CF3C5F25A7570700463B21 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				63CF3C6025A7571B00463B21 /* AuthButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
 		63DD8C9625A4CF9A00A75B29 = {
 			isa = PBXGroup;
 			children = (
@@ -74,6 +88,7 @@
 		63DD8CB725A4CFB000A75B29 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				63CF3C5525A58E0000463B21 /* Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -89,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				63DD8CBE25A4D0AB00A75B29 /* LoginViewController.swift */,
+				63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -96,6 +112,7 @@
 		63DD8CBB25A4CFBD00A75B29 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				63CF3C5F25A7570700463B21 /* Buttons */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -178,8 +195,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				63DD8CA325A4CF9A00A75B29 /* AppDelegate.swift in Sources */,
+				63CF3C6125A7571B00463B21 /* AuthButton.swift in Sources */,
 				63DD8CBF25A4D0AB00A75B29 /* LoginViewController.swift in Sources */,
 				63DD8CA525A4CF9A00A75B29 /* SceneDelegate.swift in Sources */,
+				63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */,
+				63CF3C5D25A72C5800463B21 /* SignUpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
