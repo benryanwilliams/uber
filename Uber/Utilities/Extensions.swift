@@ -12,11 +12,11 @@ import UIKit
 extension UIColor {
     
     func image(_ size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
-            return UIGraphicsImageRenderer(size: size).image { rendererContext in
-                self.setFill()
-                rendererContext.fill(CGRect(origin: .zero, size: size))
-            }
+        return UIGraphicsImageRenderer(size: size).image { rendererContext in
+            self.setFill()
+            rendererContext.fill(CGRect(origin: .zero, size: size))
         }
+    }
     
     static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
         return UIColor(red: red/255, green: green/255, blue: blue/255, alpha: 1.0)
@@ -131,6 +131,8 @@ extension UITextField {
         textField.font = UIFont.systemFont(ofSize: 16)
         textField.textColor = .white
         textField.keyboardAppearance = .dark
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
         textField.isSecureTextEntry = isSecureTextEntry
         textField.attributedPlaceholder = NSAttributedString(
             string: placeholder,

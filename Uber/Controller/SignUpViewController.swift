@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SignUpViewController: UIViewController {
 
@@ -52,16 +53,19 @@ class SignUpViewController: UIViewController {
     }()
     
     private let passwordTextField: UITextField = {
-        return UITextField().textField(withPlaceholder: "Password", isSecureTextEntry: true)
+        let textField = UITextField().textField(withPlaceholder: "Password", isSecureTextEntry: true)
+        return textField
     }()
     
     private let accountTypeSegmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Rider", "Driver"])
-        sc.backgroundColor = UIColor.black
+        sc.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        sc.tintColor = UIColor(white: 1, alpha: 0.87)
         sc.layer.borderColor = UIColor(white: 1, alpha: 0.87).cgColor
         sc.layer.borderWidth = 1
         sc.selectedSegmentTintColor = UIColor(white: 1, alpha: 0.87)
         sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor.backgroundColor], for: .selected)
+        sc.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor(white: 1, alpha: 0.87)], for: .normal)
         sc.selectedSegmentIndex = 0
         return sc
     }()
@@ -70,6 +74,7 @@ class SignUpViewController: UIViewController {
         let button = AuthButton(type: .system)
         button.setTitle("Sign Up", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(didTapSignUpButton), for: .touchUpInside)
         return button
     }()
     
@@ -104,6 +109,30 @@ class SignUpViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc func didTapSignUpButton() {
+        guard let email = emailTextField.text else { return}
+        guard let password = passwordTextField.text else { return }
+        guard let name = nameTextField.text else { return }
+        let accountTypeIndex = accountTypeSegmentedControl.selectedSegmentIndex
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                print("DEBUG: Failed to register user with error: \(error)")
+                return
+            }
+            else {
+                
+                guard let uid = result?.user.uid else { return }
+                
+                let values = ["email": email, "password": password, "name": name, "accountType": accountTypeIndex] as [String : Any]
+                
+                Database.database().reference().child("users").child(uid).updateChildValues(values) { (error, ref) in
+                    print("Successfully registered user and saved data")
+                }
+            }
+        }
+    }
+    
     // MARK:- Helpers
     
     private func configureUI() {
@@ -127,7 +156,7 @@ class SignUpViewController: UIViewController {
                      paddingRight: 16)
         
         view.addSubview(alreadyHaveAccountButton)
-        alreadyHaveAccountButton.anchor(bottom: view.bottomAnchor)
+        alreadyHaveAccountButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor)
         alreadyHaveAccountButton.centerX(inView: view)
         
     }
