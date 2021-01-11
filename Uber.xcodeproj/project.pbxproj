@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		0693334A4632E92839A8DDCA /* Pods_Uber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EBEB2BFB942C34100C3D367 /* Pods_Uber.framework */; };
+		63C0AD0C25AC3A9900F903DE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */; };
 		63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5525A58E0000463B21 /* Extensions.swift */; };
 		63CF3C5D25A72C5800463B21 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */; };
 		63CF3C6125A7571B00463B21 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C6025A7571B00463B21 /* AuthButton.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		2EBEB2BFB942C34100C3D367 /* Pods_Uber.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uber.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		63CF3C5525A58E0000463B21 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		63CF3C6025A7571B00463B21 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
@@ -56,7 +58,6 @@
 				EBB2E5A4C7E947C9F7FB4BD0 /* Pods-Uber.debug.xcconfig */,
 				B62045457C682CB39531F132 /* Pods-Uber.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -125,6 +126,7 @@
 			children = (
 				63DD8CBE25A4D0AB00A75B29 /* LoginViewController.swift */,
 				63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */,
+				63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -272,6 +274,7 @@
 				63DD8CBF25A4D0AB00A75B29 /* LoginViewController.swift in Sources */,
 				63DD8CA525A4CF9A00A75B29 /* SceneDelegate.swift in Sources */,
 				63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */,
+				63C0AD0C25AC3A9900F903DE /* HomeViewController.swift in Sources */,
 				63CF3C5D25A72C5800463B21 /* SignUpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

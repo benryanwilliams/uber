@@ -128,7 +128,11 @@ class SignUpViewController: UIViewController {
                 
                 Database.database().reference().child("users").child(uid).updateChildValues(values) { (error, ref) in
                     print("Successfully registered user and saved data")
-                }
+                    
+                    // Configure HomeViewController UI then return to it
+                    guard let rootVC = UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController as? HomeViewController else { return }
+                    rootVC.configureUI()
+                    self.dismiss(animated: true, completion: nil)                }
             }
         }
     }

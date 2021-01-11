@@ -88,6 +88,11 @@ class LoginViewController: UIViewController {
                 return
             }
             print("User signed in")
+            
+            // Configure HomeViewController UI then return to it
+            guard let rootVC = UIApplication.shared.windows.first(where: \.isKeyWindow)?.rootViewController as? HomeViewController else { return }
+            rootVC.configureUI()
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
