@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
     
     private let mapView = MKMapView()
     private let locationManager = CLLocationManager()
+    private let inputActivationView = LocationInputActivationView()
     
     
     // MARK:- Lifecycle
@@ -59,6 +60,7 @@ class HomeViewController: UIViewController {
     
     public func configureUI() {
         configureMapView()
+        configureInputActivationView()
     }
     
     // MARK:- Private Helper Functions
@@ -69,6 +71,20 @@ class HomeViewController: UIViewController {
         
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
+    }
+    
+    private func configureInputActivationView() {
+        inputActivationView.delegate = self
+        
+        view.addSubview(inputActivationView)
+        inputActivationView.centerX(inView: view)
+        inputActivationView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.safeAreaLayoutGuide.leftAnchor, right: view.safeAreaLayoutGuide.rightAnchor, paddingTop: 60, paddingLeft: 20, paddingRight: 20, height: 40)
+        
+        // Animate inputActivationView (fade in)
+        inputActivationView.alpha = 0
+        UIView.animate(withDuration: 2) {
+            self.inputActivationView.alpha = 1
+        }
     }
     
 }
@@ -105,4 +121,14 @@ extension HomeViewController: CLLocationManagerDelegate {
             locationManager.requestAlwaysAuthorization()
         }
     }
+}
+
+// MARK:- Input Activation View Delegate Methods
+
+extension HomeViewController: LocationInputActivationViewDelegate {
+    func presentLocationInputView() {
+        print(123)
+    }
+    
+    
 }

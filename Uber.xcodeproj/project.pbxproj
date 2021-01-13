@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0693334A4632E92839A8DDCA /* Pods_Uber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EBEB2BFB942C34100C3D367 /* Pods_Uber.framework */; };
+		638A04D925AF077A00C84444 /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A04D825AF077A00C84444 /* LocationInputActivationView.swift */; };
 		63C0AD0C25AC3A9900F903DE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */; };
 		63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5525A58E0000463B21 /* Extensions.swift */; };
 		63CF3C5D25A72C5800463B21 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */; };
@@ -23,6 +24,7 @@
 
 /* Begin PBXFileReference section */
 		2EBEB2BFB942C34100C3D367 /* Pods_Uber.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uber.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		638A04D825AF077A00C84444 /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
 		63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		63CF3C5525A58E0000463B21 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				63CF3C5F25A7570700463B21 /* Buttons */,
+				638A04D825AF077A00C84444 /* LocationInputActivationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 				63DD8CA525A4CF9A00A75B29 /* SceneDelegate.swift in Sources */,
 				63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */,
 				63C0AD0C25AC3A9900F903DE /* HomeViewController.swift in Sources */,
+				638A04D925AF077A00C84444 /* LocationInputActivationView.swift in Sources */,
 				63CF3C5D25A72C5800463B21 /* SignUpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
