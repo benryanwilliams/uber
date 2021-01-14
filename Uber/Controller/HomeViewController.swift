@@ -10,12 +10,13 @@ import Firebase
 import MapKit
 
 class HomeViewController: UIViewController {
-
+    
     // MARK:- Properties
     
     private let mapView = MKMapView()
     private let locationManager = CLLocationManager()
     private let inputActivationView = LocationInputActivationView()
+    private let locationInputView = LocationInputView()
     
     
     // MARK:- Lifecycle
@@ -24,9 +25,9 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         checkIfUserLoggedIn()
         locationManagerDidChangeAuthorization(locationManager)
-
+        
         view.backgroundColor = .red
-//        logOut()
+        //        logOut()
     }
     
     // MARK:- Auth
@@ -87,6 +88,20 @@ class HomeViewController: UIViewController {
         }
     }
     
+    private func configureLocationInputView() {
+        locationInputView.delegate = self
+        
+        view.addSubview(locationInputView)
+        locationInputView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, height: 200)
+        locationInputView.alpha = 0
+        
+        UIView.animate(withDuration: 0.5) {
+            self.locationInputView.alpha = 1
+        } completion: { _ in
+            print("DEBUG: Present table view")
+        }
+    }
+    
 }
 
 // MARK:- Location Manager Services
@@ -127,8 +142,25 @@ extension HomeViewController: CLLocationManagerDelegate {
 
 extension HomeViewController: LocationInputActivationViewDelegate {
     func presentLocationInputView() {
-        print(123)
+        configureLocationInputView()
+        self.inputActivationView.alpha = 0
     }
     
-    
 }
+
+// MARK:- Input View Delegate Methods
+
+extension HomeViewController: LocationInputViewDelegate {
+    func dismissLocationInputView() {
+        UIView.animate(withDuration: 0.3) {
+            self.locationInputView.alpha = 0
+        } completion: { _ in
+            UIView.animate(withDuration: 0.3) {
+                self.inputActivationView.alpha = 1
+            }
+        }
+    }
+}
+
+
+

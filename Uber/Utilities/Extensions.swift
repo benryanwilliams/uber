@@ -113,10 +113,12 @@ extension UIView {
     }
     
     func centerX(inView view: UIView, constant: CGFloat = 0) {
+        translatesAutoresizingMaskIntoConstraints = false
         centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: constant).isActive = true
     }
     
     func centerY(inView view: UIView, constant: CGFloat = 0, leftAnchor: NSLayoutXAxisAnchor? = nil, paddingLeft: CGFloat = 0) {
+        translatesAutoresizingMaskIntoConstraints = false
         centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: constant).isActive = true
         
         if let left = leftAnchor {
@@ -128,6 +130,12 @@ extension UIView {
         translatesAutoresizingMaskIntoConstraints = false
         heightAnchor.constraint(equalToConstant: height).isActive = true
         widthAnchor.constraint(equalToConstant: width).isActive = true
+    }
+    
+    func addShadow() {
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.55
+        layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
     }
 }
 
