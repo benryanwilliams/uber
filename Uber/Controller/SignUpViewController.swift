@@ -124,7 +124,7 @@ class SignUpViewController: UIViewController {
                 
                 guard let uid = result?.user.uid else { return }
                 
-                let values = ["email": email, "password": password, "name": name, "accountType": accountTypeIndex] as [String : Any]
+                let values = ["email": email, "name": name, "accountType": accountTypeIndex] as [String : Any]
                 
                 Database.database().reference().child("users").child(uid).updateChildValues(values) { (error, ref) in
                     print("Successfully registered user and saved data")

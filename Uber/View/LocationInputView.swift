@@ -15,20 +15,27 @@ class LocationInputView: UIView {
     
     weak var delegate: LocationInputViewDelegate?
     
-    // MARK:- Properties
+    public var user: User? {
+        didSet {
+            titleLabel.text = user?.name
+        }
+    }
+    
+    // MARK:- Public Properties
+    
+    private let titleLabel: UILabel = {
+       let label = UILabel()
+        label.textColor = .darkGray
+        return label
+    }()
+    
+    // MARK:- Private Properties
     
     private let backButton: UIButton = {
         let button = UIButton()
         button.setImage(#imageLiteral(resourceName: "baseline_arrow_back_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
         button.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         return button
-    }()
-    
-    private let titleLabel: UILabel = {
-       let label = UILabel()
-        label.text = "Ben Williams"
-        label.textColor = .darkGray
-        return label
     }()
     
     private let startingLocationTextField: UITextField = {

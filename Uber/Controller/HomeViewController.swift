@@ -18,10 +18,13 @@ class HomeViewController: UIViewController {
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
     
-    private let tableView: UITableView = {
-       let tableView = UITableView()
-        return tableView
-    }()
+    private let tableView = UITableView()
+    
+    private var user: User? {
+        didSet {
+            locationInputView.user = user
+        }
+    }
     
     
     // MARK:- Lifecycle
@@ -30,12 +33,20 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         checkIfUserLoggedIn()
         locationManagerDidChangeAuthorization(locationManager)
+        fetchUserData()
         
         view.backgroundColor = .red
-        //        logOut()
+        // logOut()
     }
     
-    // MARK:- Auth
+    // MARK:- API
+    
+    private func fetchUserData() {
+        Service.shared.fetchUserData { user in
+            self.user = user
+        }
+        
+    }
     
     private func checkIfUserLoggedIn() {
         if Auth.auth().currentUser == nil {
