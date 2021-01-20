@@ -38,7 +38,7 @@ extension UIView {
         imageView.alpha = 0.87
         view.addSubview(imageView)
         
-        
+        // If text field exists
         if let textField = textField {
             imageView.anchor(left: view.leftAnchor, paddingLeft: 8, width: 24, height: 24)
             imageView.centerY(inView: view)
@@ -51,6 +51,7 @@ extension UIView {
                              paddingLeft: 8)
         }
         
+        // If segmented control exists
         if let sc = segmentedControl {
             imageView.anchor(top: view.topAnchor, left: view.leftAnchor, paddingTop: -8, paddingLeft: 8, width: 24, height: 24)
             
@@ -59,7 +60,7 @@ extension UIView {
             sc.centerY(inView: view, constant: 8)
         }
         
-        
+        // Add line at bottom of container view
         let separatorView = UIView()
         separatorView.backgroundColor = .lightGray
         view.addSubview(separatorView)
@@ -157,5 +158,20 @@ extension UITextField {
             attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray]
         )
         return textField
+    }
+}
+
+// MARK:- UIViewController
+
+extension UIViewController {
+
+    @objc func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action:    #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

@@ -68,6 +68,7 @@ class LoginViewController: UIViewController {
         
         configureUI()
         configureNavigationBar()
+        self.hideKeyboardWhenTappedAround()
         
     }
     

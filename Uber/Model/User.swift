@@ -12,6 +12,7 @@ struct User {
     public let email: String
     public let name: String
     
+    // When creating a User, pass in a dictionary (from the database), which will populate the attributes of the user
     init(dictionary: [String: Any]) {
         self.accountType = dictionary["accountType"] as? Int ?? 0
         self.email = dictionary["email"] as? String ?? ""

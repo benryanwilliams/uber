@@ -38,6 +38,10 @@ class LocationInputActivationView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
+        
+        // When tapped, present input activation view
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapInputActivationView))
+        addGestureRecognizer(tap)
     }
     
     required init?(coder: NSCoder) {
@@ -58,9 +62,6 @@ class LocationInputActivationView: UIView {
         
         addSubview(placeholderLabel)
         placeholderLabel.centerY(inView: self, leftAnchor: indicatorView.rightAnchor, paddingLeft: 20)
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapInputActivationView))
-        addGestureRecognizer(tap)
         
     }
     

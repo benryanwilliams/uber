@@ -15,6 +15,7 @@ class LocationInputView: UIView {
     
     weak var delegate: LocationInputViewDelegate?
     
+    // When user logs in or signs up, change the titleLabel to the user's name
     public var user: User? {
         didSet {
             titleLabel.text = user?.name
@@ -45,6 +46,7 @@ class LocationInputView: UIView {
         textField.font = .systemFont(ofSize: 16)
         textField.isUserInteractionEnabled = false
         
+        // Add padding on left side of text field
         let paddingView = UIView()
         paddingView.setDimensions(height: 30, width: 8)
         textField.leftView = paddingView
@@ -60,9 +62,9 @@ class LocationInputView: UIView {
         textField.font = .systemFont(ofSize: 16)
         textField.returnKeyType = .search
         
-        let leftView = UIView()
-        leftView.setDimensions(height: 30, width: 8)
-        textField.leftView = leftView
+        let paddingView = UIView()
+        paddingView.setDimensions(height: 30, width: 8)
+        textField.leftView = paddingView
         textField.leftViewMode = .always
         
         return textField

@@ -8,8 +8,9 @@
 import UIKit
 import Firebase
 
-private let DB_REF = Database.database().reference()
-private let REF_USERS = DB_REF.child("users")
+public let DB_REF = Database.database().reference()
+public let REF_USERS = DB_REF.child("users")
+public let REF_DRIVER_LOCATIONS = DB_REF.child("driver-locations")
 
 struct Service {
     
