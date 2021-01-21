@@ -34,19 +34,51 @@ class HomeViewController: UIViewController {
         checkIfUserLoggedIn()
         locationManagerDidChangeAuthorization(locationManager!)
         fetchUserData()
+        fetchDrivers()
         
         
-        
-         logOut()
+//         logOut()
     }
     
     // MARK:- API
     
     private func fetchUserData() {
-        Service.shared.fetchUserData { user in
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        Service.shared.fetchUserData(uid: currentUserId) { user in
             self.user = user
         }
         
+    }
+    
+    // N.B. Service.shared.fetchDrivers automatically gets called every time the location of the driver changes since it is observing the database via geofire (see definition of this within Service.swift)
+    private func fetchDrivers() {
+        guard let location = locationManager?.location else { return }
+        Service.shared.fetchDrivers(location: location) { (driver) in
+            guard let coordinate = driver.location?.coordinate else { return }
+            let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
+            
+            var driverIsVisible: Bool {
+                return self.mapView.annotations.contains { annotation -> Bool in
+                    guard let driverAnnotation = annotation as? DriverAnnotation else { return false }
+                    if driverAnnotation.uid == driver.uid {
+                        // Driver is already visible - update driver location whenever this function is called
+                        driverAnnotation.updateAnnotationPosition(withCoordinate: coordinate)
+                        return true
+                    }
+                    
+                    // Driver is not visible
+                    return false
+                }
+                
+            }
+            
+            // If driver is not visible then add to map
+            if !driverIsVisible {
+                self.mapView.addAnnotation(annotation)
+            }
+            
+            
+        }
     }
     
     private func checkIfUserLoggedIn() {
@@ -93,6 +125,8 @@ class HomeViewController: UIViewController {
     private func configureMapView() {
         view.addSubview(mapView)
         mapView.frame = view.frame
+        
+        mapView.delegate = self
         
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
@@ -144,6 +178,19 @@ class HomeViewController: UIViewController {
         tableView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
     }
     
+}
+
+// MARK:- MapView Delegate Functions
+
+extension HomeViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if let annotation = annotation as? DriverAnnotation {
+            let view = MKAnnotationView(annotation: annotation, reuseIdentifier: DriverAnnotation.identifier)
+            view.image = #imageLiteral(resourceName: "chevron-sign-to-right")
+            return view
+        }
+        return nil
+    }
 }
 
 // MARK:- Location Manager Services

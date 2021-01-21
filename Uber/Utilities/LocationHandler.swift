@@ -21,7 +21,7 @@ class LocationHandler: NSObject, CLLocationManagerDelegate {
         locationManager.delegate = self
     }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedWhenInUse {
             locationManager.requestAlwaysAuthorization()
         }

@@ -132,6 +132,7 @@ class SignUpViewController: UIViewController {
                 let values = ["email": email, "name": name, "accountType": accountTypeIndex] as [String : Any]
                 
                 if accountTypeIndex == 1 {
+                    // Driver - set location
                     let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
                     
                     guard let location = self.location else { return }
@@ -168,9 +169,9 @@ class SignUpViewController: UIViewController {
         
         let stack = UIStackView(arrangedSubviews: [emailContainerView, nameContainerView, passwordContainerView, accountTypeContainerView, signUpButton])
         stack.axis = .vertical
-        stack.distribution = .fillProportionally
+//        stack.distribution = .fillProportionally
         stack.spacing = 24
-        
+
         view.addSubview(stack)
         stack.anchor(top: titleLabel.bottomAnchor,
                      left: view.leftAnchor,
@@ -180,7 +181,7 @@ class SignUpViewController: UIViewController {
                      paddingRight: 16)
         
         view.addSubview(alreadyHaveAccountButton)
-        alreadyHaveAccountButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor)
+        alreadyHaveAccountButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, height: 32)
         alreadyHaveAccountButton.centerX(inView: view)
         
     }
