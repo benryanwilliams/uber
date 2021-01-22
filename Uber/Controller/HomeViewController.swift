@@ -17,6 +17,7 @@ class HomeViewController: UIViewController {
     private let locationManager = LocationHandler.shared.locationManager
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
+    private var searchResults = [MKPlacemark]()
     
     private let tableView = UITableView()
     
@@ -33,11 +34,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         checkIfUserLoggedIn()
         locationManagerDidChangeAuthorization(locationManager!)
-        fetchUserData()
-        fetchDrivers()
         
-        
-//         logOut()
     }
     
     // MARK:- API
@@ -93,7 +90,7 @@ class HomeViewController: UIViewController {
             }
         } else {
             // User is logged in
-            configureUI()
+            configure()
         }
         
     }
@@ -113,6 +110,12 @@ class HomeViewController: UIViewController {
     }
     
     // MARK:- Public Helper Functions
+    
+    public func configure() {
+        configureUI()
+        fetchUserData()
+        fetchDrivers()
+    }
     
     public func configureUI() {
         configureMapView()
@@ -183,7 +186,28 @@ class HomeViewController: UIViewController {
 // MARK:- MapView Delegate Functions
 
 extension HomeViewController: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    
+    public func searchBy(naturalLanguageQuery: String, completion: @escaping([MKPlacemark]) -> Void) {
+        var results = [MKPlacemark]()
+        
+        let request = MKLocalSearch.Request()
+        request.region = mapView.region
+        request.naturalLanguageQuery = naturalLanguageQuery
+        
+        let search = MKLocalSearch(request: request)
+        search.start { (response, error) in
+            guard let response = response else { return }
+            
+            response.mapItems.forEach { (item) in
+                results.append(item.placemark)
+            }
+            completion(results)
+        }
+        
+    }
+    
+    // Change driver annotation appearance to Uber arrow
+    public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? DriverAnnotation {
             let view = MKAnnotationView(annotation: annotation, reuseIdentifier: DriverAnnotation.identifier)
             view.image = #imageLiteral(resourceName: "chevron-sign-to-right")
@@ -233,6 +257,15 @@ extension HomeViewController: LocationInputActivationViewDelegate {
 // MARK:- Input View Delegate Methods
 
 extension HomeViewController: LocationInputViewDelegate {
+    func executeSearch(query: String) {
+        searchBy(naturalLanguageQuery: query) { (results) in
+            print("DEBUG: Placemarks are \(results)")
+            self.searchResults = results
+            self.tableView.reloadData()
+        }
+        
+    }
+    
     func dismissLocationInputView() {
         UIView.animate(withDuration: 0.3) {
             self.locationInputView.alpha = 0
@@ -258,11 +291,14 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : 5
+        return section == 0 ? 2 : searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: LocationTableViewCell.identifier, for: indexPath) as! LocationTableViewCell
+        if indexPath.section == 1 {
+            cell.placemark = searchResults[indexPath.row]
+        }
         return cell
     }
     

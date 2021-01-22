@@ -9,6 +9,7 @@ import UIKit
 
 protocol LocationInputViewDelegate: AnyObject {
     func dismissLocationInputView()
+    func executeSearch(query: String)
 }
 
 class LocationInputView: UIView {
@@ -107,6 +108,7 @@ class LocationInputView: UIView {
                                          right: rightAnchor, paddingTop: 8, paddingLeft: 40,
                                          paddingRight: 40, height: 30)
         
+        destinationLocationTextField.delegate = self
         addSubview(destinationLocationTextField)
         destinationLocationTextField.anchor(top: startingLocationTextField.bottomAnchor, left: leftAnchor,
                                          right: rightAnchor, paddingTop: 20, paddingLeft: 40,
@@ -150,4 +152,14 @@ class LocationInputView: UIView {
     
     
     
+}
+
+// MARK:- TextFieldDelegate Methods
+
+extension LocationInputView: UISearchTextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let text = textField.text else { return false }
+        delegate?.executeSearch(query: text)
+        return true
+    }
 }

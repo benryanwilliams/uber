@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import MapKit
 
 // MARK:- UIColor
 
@@ -173,5 +174,18 @@ extension UIViewController {
 
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK:- MKPlacemark
+
+extension MKPlacemark {
+    var address: String? {
+        guard let number = subThoroughfare else { return nil }
+        guard let street = thoroughfare else { return nil }
+        guard let city = locality else { return nil }
+        guard let state = administrativeArea else { return nil }
+        
+        return "\(number) \(street), \(city), \(state)"
     }
 }
