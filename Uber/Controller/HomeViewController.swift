@@ -28,6 +28,7 @@ class HomeViewController: UIViewController {
     private let locationInputView = LocationInputView()
     private var searchResults = [MKPlacemark]()
     private var actionButtonConfig = ActionButtonConfiguration()
+    private var route: MKRoute?
     
     private let tableView = UITableView()
     
@@ -61,11 +62,7 @@ class HomeViewController: UIViewController {
         case .showMenu:
             print("Show menu")
         case .dismissActionView:
-            mapView.annotations.forEach { annotation in
-                if let anno = annotation as? MKPointAnnotation {
-                    mapView.removeAnnotation(anno)
-                }
-            }
+            removeAnnotationsAndOverlays()
             
             UIView.animate(withDuration: 0.3) {
                 self.configureActionButtonState(config: .showMenu)
@@ -244,13 +241,40 @@ class HomeViewController: UIViewController {
         }, completion: completion)
     }
     
+    private func removeAnnotationsAndOverlays() {
+        mapView.annotations.forEach { annotation in
+            if let anno = annotation as? MKPointAnnotation {
+                mapView.removeAnnotation(anno)
+            }
+        }
+        if mapView.overlays.count > 0 {
+            mapView.removeOverlay(mapView.overlays[0])
+        }
+    }
+    
 }
 
-// MARK:- MapView Delegate Functions
+// MARK:- MapView Functions
 
 extension HomeViewController: MKMapViewDelegate {
     
-    public func searchBy(naturalLanguageQuery: String, completion: @escaping([MKPlacemark]) -> Void) {
+    private func generatePolyline(toDestination destination: MKMapItem) {
+        let request = MKDirections.Request()
+        request.source = MKMapItem.forCurrentLocation()
+        request.destination = destination
+        request.transportType = .automobile
+        
+        let directionRequest = MKDirections(request: request)
+        directionRequest.calculate { (response, error) in
+            guard let response = response else { return }
+            self.route = response.routes[0]
+            guard let polyline = self.route?.polyline else { return }
+            self.mapView.addOverlay(polyline)
+            
+        }
+    }
+    
+    private func searchBy(naturalLanguageQuery: String, completion: @escaping([MKPlacemark]) -> Void) {
         var results = [MKPlacemark]()
         
         let request = MKLocalSearch.Request()
@@ -277,6 +301,17 @@ extension HomeViewController: MKMapViewDelegate {
             return view
         }
         return nil
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if let route = self.route {
+            let polyline = route.polyline
+            let lineRenderer = MKPolylineRenderer(polyline: polyline)
+            lineRenderer.strokeColor = .mainBlueTint
+            lineRenderer.lineWidth = 4
+            return lineRenderer
+        }
+        return MKOverlayRenderer()
     }
 }
 
@@ -361,15 +396,20 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let placemark = self.searchResults[indexPath.row]
-            configureActionButtonState(config: .dismissActionView)
+        let placemark = self.searchResults[indexPath.row]
         
-            self.dismissInputView { _ in
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = placemark.coordinate
-                self.mapView.addAnnotation(annotation)
-                self.mapView.selectAnnotation(annotation, animated: true)
-            }
+        configureActionButtonState(config: .dismissActionView)
+        
+        let destination = MKMapItem(placemark: placemark)
+        self.generatePolyline(toDestination: destination)
+        
+        self.dismissInputView { _ in
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = placemark.coordinate
+            self.mapView.addAnnotation(annotation)
+            self.mapView.selectAnnotation(annotation, animated: true)
+            
+        }
     }
 }
 
