@@ -189,3 +189,22 @@ extension MKPlacemark {
         return "\(number) \(street), \(city), \(state)"
     }
 }
+
+// MARK:- MapView
+
+extension MKMapView {
+    func zoomToFit(annotations: [MKAnnotation]) {
+        var zoomRect = MKMapRect.null
+        
+        annotations.forEach { (anno) in
+            let annotationPoint = MKMapPoint(anno.coordinate)
+            let pointRect = MKMapRect(x: annotationPoint.x, y: annotationPoint.y, width: 0.01, height: 0.01)
+            
+            // Make a larger rectangle out of the smaller rectangles containing annotation points
+            zoomRect = zoomRect.union(pointRect)
+        }
+        
+        let insets = UIEdgeInsets(top: 100, left: 100, bottom: 300, right: 100)
+        setVisibleMapRect(zoomRect, edgePadding: insets, animated: true)
+    }
+}

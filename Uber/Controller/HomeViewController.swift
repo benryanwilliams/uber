@@ -24,8 +24,11 @@ class HomeViewController: UIViewController {
     
     private let mapView = MKMapView()
     private let locationManager = LocationHandler.shared.locationManager
+    private let rideActionView = RideActionView()
+    private let rideActionViewHeight: CGFloat = 300
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
+    private let locationInputViewHeight: CGFloat = 200
     private var searchResults = [MKPlacemark]()
     private var actionButtonConfig = ActionButtonConfiguration()
     private var route: MKRoute?
@@ -63,10 +66,12 @@ class HomeViewController: UIViewController {
             print("Show menu")
         case .dismissActionView:
             removeAnnotationsAndOverlays()
-            
+            mapView.showAnnotations(mapView.annotations, animated: true)
+
             UIView.animate(withDuration: 0.3) {
                 self.configureActionButtonState(config: .showMenu)
                 self.inputActivationView.alpha = 1
+                self.animateRideActionView(shouldShow: false)
             }
         }
     }
@@ -156,9 +161,18 @@ class HomeViewController: UIViewController {
         configureActionButton()
         configureInputActivationView()
         configureTableView()
+        configureRideActionView()
     }
     
     // MARK:- Private Helper Functions
+    
+    private func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil) {
+        let yOrigin = shouldShow ? self.view.frame.height - rideActionViewHeight : self.view.frame.height
+        UIView.animate(withDuration: 0.3) {
+            self.rideActionView.frame.origin.y = yOrigin
+        }
+        rideActionView.destination = destination
+    }
     
     private func configureActionButton() {
         view.addSubview(actionButton)
@@ -205,7 +219,7 @@ class HomeViewController: UIViewController {
         locationInputView.delegate = self
         
         view.addSubview(locationInputView)
-        locationInputView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, height: 200)
+        locationInputView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, height: locationInputViewHeight)
         locationInputView.alpha = 0
         
         UIView.animate(withDuration: 0.5) {
@@ -231,6 +245,11 @@ class HomeViewController: UIViewController {
         
         let height = view.frame.height - locationInputView.frame.height
         tableView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: height)
+    }
+    
+    private func configureRideActionView() {
+        view.addSubview(rideActionView)
+        rideActionView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: rideActionViewHeight)
     }
     
     private func dismissInputView(completion: ((Bool) -> Void)? = nil) {
@@ -306,7 +325,7 @@ extension HomeViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let route = self.route {
             let polyline = route.polyline
-            let lineRenderer = MKPolylineRenderer(polyline: polyline)
+            let lineRenderer = MKPolylineRenderer(overlay: polyline)
             lineRenderer.strokeColor = .mainBlueTint
             lineRenderer.lineWidth = 4
             return lineRenderer
@@ -357,7 +376,6 @@ extension HomeViewController: LocationInputActivationViewDelegate {
 extension HomeViewController: LocationInputViewDelegate {
     func executeSearch(query: String) {
         searchBy(naturalLanguageQuery: query) { (results) in
-            print("DEBUG: Placemarks are \(results)")
             self.searchResults = results
             self.tableView.reloadData()
         }
@@ -396,19 +414,24 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let placemark = self.searchResults[indexPath.row]
+        let selectedPlacemark = self.searchResults[indexPath.row]
         
         configureActionButtonState(config: .dismissActionView)
         
-        let destination = MKMapItem(placemark: placemark)
+        let destination = MKMapItem(placemark: selectedPlacemark)
         self.generatePolyline(toDestination: destination)
         
         self.dismissInputView { _ in
             let annotation = MKPointAnnotation()
-            annotation.coordinate = placemark.coordinate
+            annotation.coordinate = selectedPlacemark.coordinate
             self.mapView.addAnnotation(annotation)
             self.mapView.selectAnnotation(annotation, animated: true)
             
+            // Adds only non-driver annotations to 'annotations' array
+            let annotations = self.mapView.annotations.filter({!$0.isKind(of: DriverAnnotation.self)})
+            self.mapView.zoomToFit(annotations: annotations) // Zooms in on these annotations only
+            
+            self.animateRideActionView(shouldShow: true, destination: selectedPlacemark)
         }
     }
 }

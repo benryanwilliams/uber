@@ -12,6 +12,7 @@
 		6302FD6325B3282E00AF5DC0 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302FD6225B3282E00AF5DC0 /* User.swift */; };
 		636D85C225B89B6900158E23 /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D85C125B89B6900158E23 /* LocationHandler.swift */; };
 		638A04D925AF077A00C84444 /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638A04D825AF077A00C84444 /* LocationInputActivationView.swift */; };
+		639A021A25C16C5F0065A588 /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A021925C16C5F0065A588 /* RideActionView.swift */; };
 		639D178625B1980300FBB7CB /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D178525B1980300FBB7CB /* LocationTableViewCell.swift */; };
 		63C0AD0C25AC3A9900F903DE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */; };
 		63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5525A58E0000463B21 /* Extensions.swift */; };
@@ -34,6 +35,7 @@
 		6302FD6225B3282E00AF5DC0 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		636D85C125B89B6900158E23 /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
 		638A04D825AF077A00C84444 /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
+		639A021925C16C5F0065A588 /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		639D178525B1980300FBB7CB /* LocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
 		63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		63CF3C5525A58E0000463B21 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				63CF3C5F25A7570700463B21 /* Buttons */,
 				638A04D825AF077A00C84444 /* LocationInputActivationView.swift */,
 				63E4A83625B0A7700057F597 /* LocationInputView.swift */,
+				639A021925C16C5F0065A588 /* RideActionView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 				639D178625B1980300FBB7CB /* LocationTableViewCell.swift in Sources */,
 				636D85C225B89B6900158E23 /* LocationHandler.swift in Sources */,
 				63C0AD0C25AC3A9900F903DE /* HomeViewController.swift in Sources */,
+				639A021A25C16C5F0065A588 /* RideActionView.swift in Sources */,
 				6302FD6325B3282E00AF5DC0 /* User.swift in Sources */,
 				6302FD6025B2DF7300AF5DC0 /* Service.swift in Sources */,
 				638A04D925AF077A00C84444 /* LocationInputActivationView.swift in Sources */,
