@@ -15,6 +15,7 @@
 		639A021A25C16C5F0065A588 /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A021925C16C5F0065A588 /* RideActionView.swift */; };
 		639D178625B1980300FBB7CB /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D178525B1980300FBB7CB /* LocationTableViewCell.swift */; };
 		63C0AD0C25AC3A9900F903DE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */; };
+		63C8F86E25C2BB2400F24835 /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C8F86D25C2BB2400F24835 /* Trip.swift */; };
 		63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5525A58E0000463B21 /* Extensions.swift */; };
 		63CF3C5D25A72C5800463B21 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */; };
 		63CF3C6125A7571B00463B21 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF3C6025A7571B00463B21 /* AuthButton.swift */; };
@@ -38,6 +39,7 @@
 		639A021925C16C5F0065A588 /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		639D178525B1980300FBB7CB /* LocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
 		63C0AD0B25AC3A9900F903DE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		63C8F86D25C2BB2400F24835 /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		63CF3C5525A58E0000463B21 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		63CF3C5C25A72C5800463B21 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		63CF3C6025A7571B00463B21 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			children = (
 				6302FD6225B3282E00AF5DC0 /* User.swift */,
 				63E5C52625B9829F002A55B8 /* DriverAnnotation.swift */,
+				63C8F86D25C2BB2400F24835 /* Trip.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				63CF3C6125A7571B00463B21 /* AuthButton.swift in Sources */,
 				63DD8CBF25A4D0AB00A75B29 /* LoginViewController.swift in Sources */,
 				63E4A83725B0A7700057F597 /* LocationInputView.swift in Sources */,
+				63C8F86E25C2BB2400F24835 /* Trip.swift in Sources */,
 				63E5C52725B9829F002A55B8 /* DriverAnnotation.swift in Sources */,
 				63DD8CA525A4CF9A00A75B29 /* SceneDelegate.swift in Sources */,
 				63CF3C5625A58E0000463B21 /* Extensions.swift in Sources */,

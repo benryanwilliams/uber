@@ -38,6 +38,12 @@ class HomeViewController: UIViewController {
     private var user: User? {
         didSet {
             locationInputView.user = user
+            if user?.accountType == .passenger {
+                fetchDrivers()
+                configureInputActivationView()
+            } else {
+                
+            }
         }
     }
     
@@ -55,6 +61,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         checkIfUserLoggedIn()
         locationManagerDidChangeAuthorization(locationManager!)
+//        logOut()
         
     }
     
@@ -153,13 +160,11 @@ class HomeViewController: UIViewController {
     public func configure() {
         configureUI()
         fetchUserData()
-        fetchDrivers()
     }
     
     public func configureUI() {
         configureMapView()
         configureActionButton()
-        configureInputActivationView()
         configureTableView()
         configureRideActionView()
     }
@@ -248,6 +253,7 @@ class HomeViewController: UIViewController {
     }
     
     private func configureRideActionView() {
+        rideActionView.delegate = self
         view.addSubview(rideActionView)
         rideActionView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: rideActionViewHeight)
     }
@@ -434,6 +440,27 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             self.animateRideActionView(shouldShow: true, destination: selectedPlacemark)
         }
     }
+}
+
+// MARK:- RideActionViewDelegate
+
+extension HomeViewController: RideActionViewDelegate {
+    func uploadTrip(_ view: RideActionView) {
+        guard let pickupCoordinates = locationManager?.location?.coordinate else { return }
+        guard let destinationCoordinates = view.destination?.coordinate else { return }
+        Service.shared.uploadTrip(pickupCoordinates, destinationCoordinates) { (error, ref) in
+            if let err = error {
+                print("DEBUG: Error uploading trip: \(err)")
+                return
+            }
+            
+            print("DEBUG: Did upload trip successfully with ref: \(ref)")
+            
+            
+        }
+    }
+    
+    
 }
 
 

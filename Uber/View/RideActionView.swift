@@ -8,9 +8,16 @@
 import UIKit
 import MapKit
 
+protocol RideActionViewDelegate: AnyObject {
+    // Pass in class so we have access to properties and functions from class
+    func uploadTrip(_ view: RideActionView)
+}
+
 class RideActionView: UIView {
     
     // MARK:- Properties
+    
+    weak var delegate: RideActionViewDelegate?
     
     public var destination: MKPlacemark? {
         didSet {
@@ -96,10 +103,10 @@ class RideActionView: UIView {
         rideTypeXView.layer.cornerRadius = size/2
         
         addSubview(uberXLabel)
-        uberXLabel.anchor(top: rideTypeXView.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 4)
+        uberXLabel.anchor(top: rideTypeXView.bottomAnchor, left: leftAnchor, right: rightAnchor)
         
         addSubview(separatorLine)
-        separatorLine.anchor(top: uberXLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 16, height: 0.75)
+        separatorLine.anchor(top: uberXLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 8, height: 0.75)
         
         configureConfirmButton()
     }
@@ -112,13 +119,13 @@ class RideActionView: UIView {
     
     private func configureConfirmButton() {
         addSubview(confirmButton)
-        confirmButton.anchor(top: separatorLine.bottomAnchor, left: leftAnchor, bottom: safeAreaLayoutGuide.bottomAnchor, right: rightAnchor, paddingTop: 16, paddingLeft: 12, paddingRight: 12, height: 60)
+        confirmButton.anchor(top: separatorLine.bottomAnchor, left: leftAnchor, bottom: safeAreaLayoutGuide.bottomAnchor, right: rightAnchor, paddingTop: 16, paddingLeft: 12, paddingBottom: 12, paddingRight: 12, height: 60)
     }
     
     // MARK:- Selectors
     
     @objc private func didTapConfirmButton() {
-        print("Confirm button tapped")
+        delegate?.uploadTrip(self)
     }
     
 }
