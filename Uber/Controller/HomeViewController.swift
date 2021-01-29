@@ -42,8 +42,18 @@ class HomeViewController: UIViewController {
                 fetchDrivers()
                 configureInputActivationView()
             } else {
+                observeTrips()
                 
             }
+        }
+    }
+    
+    private var trip: Trip? {
+        didSet {
+            guard let trip = trip else { return }
+            let vc = PickupViewController(trip: trip)
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true, completion: nil)
         }
     }
     
@@ -61,7 +71,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         checkIfUserLoggedIn()
         locationManagerDidChangeAuthorization(locationManager!)
-//        logOut()
+        logOut()
         
     }
     
@@ -84,6 +94,12 @@ class HomeViewController: UIViewController {
     }
     
     // MARK:- API
+    
+    private func observeTrips() {
+        Service.shared.observeTrips { (trip) in
+            self.trip = trip
+        }
+    }
     
     private func fetchUserData() {
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
