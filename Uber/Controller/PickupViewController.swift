@@ -8,9 +8,15 @@
 import UIKit
 import MapKit
 
-class PickupViewController: UIViewController {
+protocol PickupViewControllerDelegate: AnyObject {
+    func didAcceptTrip(trip: Trip)
+}
 
+class PickupViewController: UIViewController {
+    
     // MARK:- Properties
+    
+    weak var delegate: PickupViewControllerDelegate?
     
     private var trip: Trip
     private let mapView = MKMapView()
@@ -44,6 +50,7 @@ class PickupViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configureMapView()
     }
     
     init(trip: Trip) {
@@ -62,10 +69,13 @@ class PickupViewController: UIViewController {
     }
     
     @objc func didTapAcceptButton() {
-        print("Accept button tapped")
+        Service.shared.acceptTrip(trip: trip) { (error, ref) in
+            self.delegate?.didAcceptTrip(trip: self.trip)
+            
+        }
     }
     
-
+    
     // MARK:- Helper Functions
     
     private func configureUI() {
@@ -90,5 +100,15 @@ class PickupViewController: UIViewController {
                             paddingTop: 16, paddingLeft: 32, paddingRight: 32, height: 50)
         
     }
-
+    
+    private func configureMapView() {
+        let region = MKCoordinateRegion(center: trip.pickupCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        mapView.region = region
+        
+        let anno = MKPointAnnotation()
+        anno.coordinate = trip.pickupCoordinate
+        mapView.addAnnotation(anno)
+        mapView.selectAnnotation(anno, animated: true)
+    }
+    
 }
