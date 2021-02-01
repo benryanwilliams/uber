@@ -22,6 +22,7 @@ struct Trip {
     var driverUid: String?
     var state: TripState!
     
+    // Pass in passenger uid and dictionary when trip instance initialised to populate the properties
     init(passengerUid: String, dictionary: [String: Any]) {
         self.passengerUid = passengerUid
         
