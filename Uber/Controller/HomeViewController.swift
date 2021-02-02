@@ -115,6 +115,13 @@ class HomeViewController: UIViewController {
             
             if trip.state == .accepted {
                 self.shouldPresentLoadingView(false)
+                guard let driverUid = trip.driverUid else { return }
+                
+                Service.shared.fetchUserData(uid: driverUid) { (driver) in
+                    self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: driver)
+
+                }
+                
             }
         }
     }
@@ -211,12 +218,29 @@ class HomeViewController: UIViewController {
     
     // MARK:- Private Helper Functions
     
-    private func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil) {
+    private func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil, config: RideActionViewConfiguration? = nil, user: User? = nil) {
         let yOrigin = shouldShow ? self.view.frame.height - rideActionViewHeight : self.view.frame.height
+        
         UIView.animate(withDuration: 0.3) {
             self.rideActionView.frame.origin.y = yOrigin
+            
         }
-        rideActionView.destination = destination
+        
+        if shouldShow {
+            guard let config = config else { return }
+            
+            if let destination = destination {
+                rideActionView.destination = destination
+            }
+            
+            if let user = user {
+                rideActionView.user = user
+            }
+            
+            rideActionView.configureUI(withConfig: config)
+        }
+        
+        
     }
     
     private func configureActionButton() {
@@ -332,8 +356,10 @@ extension HomeViewController: MKMapViewDelegate {
         let directionRequest = MKDirections(request: request)
         directionRequest.calculate { (response, error) in
             guard let response = response else { return }
+            print("Response is \(response)")
             self.route = response.routes[0]
             guard let polyline = self.route?.polyline else { return }
+            print("Polyline is \(polyline)")
             self.mapView.addOverlay(polyline)
             
         }
@@ -477,7 +503,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
             let annotations = self.mapView.annotations.filter({!$0.isKind(of: DriverAnnotation.self)})
             self.mapView.zoomToFit(annotations: annotations) // Zooms in on these annotations only
             
-            self.animateRideActionView(shouldShow: true, destination: selectedPlacemark)
+            self.animateRideActionView(shouldShow: true, destination: selectedPlacemark, config: .requestRide)
         }
     }
 }
@@ -512,9 +538,23 @@ extension HomeViewController: RideActionViewDelegate {
 
 extension HomeViewController: PickupViewControllerDelegate {
     func didAcceptTrip(trip: Trip) {
-        self.trip?.state = .accepted
+        let anno = MKPointAnnotation()
+        anno.coordinate = trip.pickupCoordinate
+        mapView.addAnnotation(anno)
+        mapView.selectAnnotation(anno, animated: true)
         
-        self.dismiss(animated: true, completion: nil)
+        let placemark = MKPlacemark(coordinate: trip.pickupCoordinate)
+        let mapItem = MKMapItem(placemark: placemark)
+        generatePolyline(toDestination: mapItem)
+        
+        mapView.zoomToFit(annotations: mapView.annotations)
+        
+        self.dismiss(animated: true) {
+            Service.shared.fetchUserData(uid: trip.passengerUid) { (passenger) in
+                self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: passenger)
+
+            }
+        }
         
     }
     

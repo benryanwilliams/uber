@@ -196,10 +196,10 @@ extension UIViewController {
             label.alpha = 0.87
             
             view.addSubview(loadingView)
-            view.addSubview(indicator)
-            view.addSubview(label)
+            loadingView.addSubview(indicator)
+            loadingView.addSubview(label)
             
-            label.centerX(inView: view)
+            label.centerX(inView: loadingView)
             label.anchor(top: indicator.bottomAnchor, paddingTop: 32)
             
             indicator.startAnimating()

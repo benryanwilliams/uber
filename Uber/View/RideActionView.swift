@@ -13,11 +13,48 @@ protocol RideActionViewDelegate: AnyObject {
     func uploadTrip(_ view: RideActionView)
 }
 
+enum RideActionViewConfiguration {
+    case requestRide
+    case tripAccepted
+    case pickupPassenger
+    case tripInProgress
+    case endTrip
+    
+    init() {
+        self = .requestRide
+    }
+}
+
+enum ButtonAction: CustomStringConvertible {
+    case requestRide
+    case cancel
+    case getDirections
+    case pickup
+    case dropoff
+    
+    var description: String {
+        switch self {
+        case .requestRide: return "CONFIRM UBERX"
+        case .cancel: return "CANCEL RIDE"
+        case .getDirections: return "GET DIRECTIONS"
+        case .pickup: return "PICKUP PASSENGER"
+        case .dropoff: return "DROP OFF PASSENGER"
+        }
+    }
+    
+    init() {
+        self = .requestRide
+    }
+}
+
 class RideActionView: UIView {
     
     // MARK:- Properties
     
     weak var delegate: RideActionViewDelegate?
+    var config = RideActionViewConfiguration()
+    var buttonAction = ButtonAction()
+    var user: User?
     
     public var destination: MKPlacemark? {
         didSet {
@@ -29,7 +66,6 @@ class RideActionView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18, weight: .semibold)
-        label.text = "Test address label"
         return label
     }()
     
@@ -37,7 +73,6 @@ class RideActionView: UIView {
        let label = UILabel()
         label.font = .systemFont(ofSize: 16)
         label.textColor = .lightGray
-        label.text = "123 M St, NW, Washington, DC"
         return label
     }()
     
@@ -71,7 +106,7 @@ class RideActionView: UIView {
         return view
     }()
     
-    private let confirmButton: UIButton = {
+    private let actionButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .black
         button.setTitleColor(.white, for: .normal)
@@ -118,14 +153,43 @@ class RideActionView: UIView {
     // MARK:- Helper Functions
     
     private func configureConfirmButton() {
-        addSubview(confirmButton)
-        confirmButton.anchor(top: separatorLine.bottomAnchor, left: leftAnchor, bottom: safeAreaLayoutGuide.bottomAnchor, right: rightAnchor, paddingTop: 16, paddingLeft: 12, paddingBottom: 12, paddingRight: 12, height: 60)
+        addSubview(actionButton)
+        actionButton.anchor(top: separatorLine.bottomAnchor, left: leftAnchor, bottom: safeAreaLayoutGuide.bottomAnchor, right: rightAnchor, paddingTop: 16, paddingLeft: 12, paddingBottom: 12, paddingRight: 12, height: 60)
     }
     
     // MARK:- Selectors
     
     @objc private func didTapConfirmButton() {
         delegate?.uploadTrip(self)
+    }
+    
+    // MARK:- Helper Functions
+    
+    public func configureUI(withConfig config: RideActionViewConfiguration) {
+        switch config {
+        case .requestRide:
+            buttonAction = .requestRide
+            actionButton.setTitle(buttonAction.description, for: .normal)
+        case .tripAccepted:
+            guard let otherUser = user else { return }
+            
+            if otherUser.accountType == .passenger {
+                titleLabel.text = "En route to passenger"
+                buttonAction = .getDirections
+                actionButton.setTitle(buttonAction.description, for: .normal)
+            } else {
+                titleLabel.text = "Driver en route"
+                buttonAction = .cancel
+                actionButton.setTitle(buttonAction.description, for: .normal)
+            }
+            
+        case .pickupPassenger:
+            break
+        case .tripInProgress:
+            break
+        case .endTrip:
+            break
+        }
     }
     
 }
