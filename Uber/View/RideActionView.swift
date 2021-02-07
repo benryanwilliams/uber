@@ -11,6 +11,8 @@ import MapKit
 protocol RideActionViewDelegate: AnyObject {
     // Pass in class so we have access to properties and functions from class
     func uploadTrip(_ view: RideActionView)
+    
+    func cancelTrip()
 }
 
 enum RideActionViewConfiguration {
@@ -168,7 +170,7 @@ class RideActionView: UIView {
         case .requestRide:
             delegate?.uploadTrip(self)
         case .cancel:
-            print("DEBUG: Cancel tapped")
+            delegate?.cancelTrip()
         case .getDirections:
             print("DEBUG: Handle get directions")
         case .pickup:

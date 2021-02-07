@@ -74,6 +74,12 @@ struct Service {
         }
     }
     
+    public func observeTripCancelled(trip: Trip, completion: @escaping() -> Void) {
+        REF_TRIPS.child(trip.passengerUid).observeSingleEvent(of: .childRemoved) { (snapshot) in
+            completion()
+        }
+    }
+    
     /// Pass in instance of Trip, update with driverUid, change state to accepted then update Firebase with this
     public func acceptTrip(trip: Trip, completion: @escaping (Error?, DatabaseReference) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
@@ -91,5 +97,11 @@ struct Service {
             let trip = Trip(passengerUid: uid, dictionary: dictionary)
             completion(trip)
         }
+    }
+    
+    public func cancelTrip(completion: @escaping (Error?, DatabaseReference) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        REF_TRIPS.child(uid).removeValue(completionBlock: completion)
+        
     }
 }

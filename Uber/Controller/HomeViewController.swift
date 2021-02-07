@@ -511,7 +511,17 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK:- RideActionViewDelegate
 
 extension HomeViewController: RideActionViewDelegate {
-    func uploadTrip(_ view: RideActionView) {
+    public func cancelTrip() {
+        Service.shared.cancelTrip { (error, ref) in
+            if let error = error {
+                print("DEBUG: Error cancelling trip: \(error)")
+            } else {
+                self.animateRideActionView(shouldShow: false)
+            }
+        }
+    }
+    
+    public func uploadTrip(_ view: RideActionView) {
         guard let pickupCoordinates = locationManager?.location?.coordinate else { return }
         guard let destinationCoordinates = view.destination?.coordinate else { return }
         
@@ -548,6 +558,11 @@ extension HomeViewController: PickupViewControllerDelegate {
         generatePolyline(toDestination: mapItem)
         
         mapView.zoomToFit(annotations: mapView.annotations)
+        
+        Service.shared.observeTripCancelled(trip: trip) {
+            self.removeAnnotationsAndOverlays()
+            self.animateRideActionView(shouldShow: false)
+        }
         
         self.dismiss(animated: true) {
             Service.shared.fetchUserData(uid: trip.passengerUid) { (passenger) in
