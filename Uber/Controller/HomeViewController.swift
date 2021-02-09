@@ -237,7 +237,7 @@ class HomeViewController: UIViewController {
                 rideActionView.user = user
             }
             
-            rideActionView.configureUI(withConfig: config)
+            rideActionView.config = config
         }
         
         
@@ -384,6 +384,14 @@ extension HomeViewController: MKMapViewDelegate {
         
     }
     
+    // Update driver location within Firebase when location changes on mapView
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        guard let user = self.user else { return }
+        guard user.accountType == .driver else { return }
+        guard let driverLocation = userLocation.location else { return }
+        Service.shared.updateDriverLocation(location: driverLocation)
+    }
+    
     // Change driver annotation appearance to Uber arrow
     public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? DriverAnnotation {
@@ -394,7 +402,7 @@ extension HomeViewController: MKMapViewDelegate {
         return nil
     }
     
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+    public func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let route = self.route {
             let polyline = route.polyline
             let lineRenderer = MKPolylineRenderer(overlay: polyline)
@@ -404,14 +412,35 @@ extension HomeViewController: MKMapViewDelegate {
         }
         return MKOverlayRenderer()
     }
+    
+    private func centreMapOnUser() {
+        guard let coordinate = locationManager?.location?.coordinate else { return }
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 2000, longitudinalMeters: 2000)
+        mapView.setRegion(region, animated: true)
+    }
+    
+    private func setCustomRegion(withCoordinates coordinates: CLLocationCoordinate2D) {
+        let region = CLCircularRegion(center: coordinates, radius: 25, identifier: "pickup")
+        locationManager?.startMonitoring(for: region)
+    }
 }
 
-// MARK:- Location Manager Services
+// MARK:- CLLocationManagerDelegate
 
-extension HomeViewController {
+extension HomeViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        print("DEBUG: Location manager started monitoring for region: \(region)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        print("DEBUG: Driver entered passenger region")
+        
+        self.rideActionView.config = .pickupPassenger
+    }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        
+        locationManager?.delegate = self
         switch manager.authorizationStatus {
         case .notDetermined:
             print("DEBUG: Not determined")
@@ -517,6 +546,13 @@ extension HomeViewController: RideActionViewDelegate {
                 print("DEBUG: Error cancelling trip: \(error)")
             } else {
                 self.animateRideActionView(shouldShow: false)
+                self.removeAnnotationsAndOverlays()
+                self.centreMapOnUser()
+                
+                self.actionButton.setImage(#imageLiteral(resourceName: "baseline_menu_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
+                self.actionButtonConfig = .showMenu
+                
+                self.inputActivationView.alpha = 1
             }
         }
     }
@@ -553,6 +589,8 @@ extension HomeViewController: PickupViewControllerDelegate {
         mapView.addAnnotation(anno)
         mapView.selectAnnotation(anno, animated: true)
         
+        setCustomRegion(withCoordinates: trip.pickupCoordinate)
+        
         let placemark = MKPlacemark(coordinate: trip.pickupCoordinate)
         let mapItem = MKMapItem(placemark: placemark)
         generatePolyline(toDestination: mapItem)
@@ -562,6 +600,8 @@ extension HomeViewController: PickupViewControllerDelegate {
         Service.shared.observeTripCancelled(trip: trip) {
             self.removeAnnotationsAndOverlays()
             self.animateRideActionView(shouldShow: false)
+            self.centreMapOnUser()
+            self.presentAlertController(withTitle: "Oops!", message: "The rider decided to cancel the trip, press OK to continue")
         }
         
         self.dismiss(animated: true) {

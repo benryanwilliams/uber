@@ -54,9 +54,14 @@ class RideActionView: UIView {
     // MARK:- Properties
     
     weak var delegate: RideActionViewDelegate?
-    var config = RideActionViewConfiguration()
     var buttonAction = ButtonAction()
     var user: User?
+    
+    public var config = RideActionViewConfiguration() {
+        didSet {
+            configureUI(withConfig: config)
+        }
+    }
     
     public var destination: MKPlacemark? {
         didSet {
@@ -183,7 +188,7 @@ class RideActionView: UIView {
     
     // MARK:- Helper Functions
     
-    public func configureUI(withConfig config: RideActionViewConfiguration) {
+    private func configureUI(withConfig config: RideActionViewConfiguration) {
         switch config {
         case .requestRide:
             buttonAction = .requestRide

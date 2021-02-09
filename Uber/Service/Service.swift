@@ -99,9 +99,17 @@ struct Service {
         }
     }
     
+    /// Remove Trip relating to the current user from Firebase
     public func cancelTrip(completion: @escaping (Error?, DatabaseReference) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         REF_TRIPS.child(uid).removeValue(completionBlock: completion)
         
+    }
+    
+    /// Add driver location to Firebase when location changes
+    public func updateDriverLocation(location: CLLocation) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
+        geofire.setLocation(location, forKey: uid)
     }
 }
